@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="war" name="crudjava:Web">
+    <output-path>$PROJECT_DIR$/out/artifacts/crudjava_Web</output-path>
+    <root id="archive" name="crudjava_Web.war">
+      <element id="artifact" artifact-name="crudjava:Web exploded" />
+    </root>
+  </artifact>
+</component>
