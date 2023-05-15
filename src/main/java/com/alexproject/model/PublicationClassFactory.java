@@ -10,7 +10,7 @@ import java.sql.SQLException;
 import static com.alexproject.model.PublicationType.*;
 
 public class PublicationClassFactory {
-    public Publication createPublication(ResultSet rs) throws SQLException {
+    public Publication createPublicationFromResultSet(ResultSet rs) throws SQLException {
         PublicationType type = PublicationType.valueOf(rs.getString("type"));
         Publication publication = null;
         switch (type) {

@@ -32,23 +32,7 @@ public class DaoSql implements Dao {
                 ps -> {
                     ps.setString(1, p.getName());
                     ps.setString(2, p.getType().toString());
-                    switch (p.getType()) {
-                        case BOOK:
-                            ps.setString(3, ((Book) p).getAuthor());
-                            ps.setNull(4, Types.INTEGER);
-                            ps.setString(5, null);
-                            break;
-                        case MAGAZINE:
-                            ps.setString(3, null);
-                            ps.setNull(4, Types.INTEGER);
-                            ps.setString(5, ((Magazine) p).getPublishingHouse());
-                            break;
-                        case NEWSPAPER:
-                            ps.setString(3, null);
-                            ps.setObject(4, ((Newspaper) p).getIssueNumber());
-                            ps.setString(5, null);
-                            break;
-                    }
+                    insert(ps,p);
                     boolean res = ps.execute();
                     ResultSet rs = ps.getGeneratedKeys();
                     if (rs != null && rs.next()) {
@@ -67,23 +51,7 @@ public class DaoSql implements Dao {
                 ps -> {
                     ps.setString(1, p.getName());
                     ps.setString(2, p.getType().toString());
-                    switch (p.getType()) {
-                        case BOOK:
-                            ps.setString(3, ((Book) p).getAuthor());
-                            ps.setNull(4, Types.INTEGER);
-                            ps.setString(5, null);
-                            break;
-                        case MAGAZINE:
-                            ps.setString(3, null);
-                            ps.setNull(4, Types.INTEGER);
-                            ps.setString(5, ((Magazine) p).getPublishingHouse());
-                            break;
-                        case NEWSPAPER:
-                            ps.setString(3, null);
-                            ps.setObject(4, ((Newspaper) p).getIssueNumber());
-                            ps.setString(5, null);
-                            break;
-                    }
+                    insert(ps,p);
                     ps.setInt(6, p.getId().intValue());
                     return ps.execute();
                 });
@@ -91,7 +59,7 @@ public class DaoSql implements Dao {
 
     private Publication read(ResultSet rs) throws SQLException {
         PublicationClassFactory publicationClassFactory = new PublicationClassFactory();
-        return publicationClassFactory.createPublication(rs);
+        return publicationClassFactory.createPublicationFromResultSet(rs);
     }
 
     @Override
@@ -143,6 +111,25 @@ public class DaoSql implements Dao {
             }
             return rs.getInt(1);
         });
+    }
+    private void insert(PreparedStatement ps, Publication p) throws SQLException {
+        switch (p.getType()) {
+            case BOOK:
+                ps.setString(3, ((Book) p).getAuthor());
+                ps.setNull(4, Types.INTEGER);
+                ps.setString(5, null);
+                break;
+            case MAGAZINE:
+                ps.setString(3, null);
+                ps.setNull(4, Types.INTEGER);
+                ps.setString(5, ((Magazine) p).getPublishingHouse());
+                break;
+            case NEWSPAPER:
+                ps.setString(3, null);
+                ps.setObject(4, ((Newspaper) p).getIssueNumber());
+                ps.setString(5, null);
+                break;
+        }
     }
 
     //hard
