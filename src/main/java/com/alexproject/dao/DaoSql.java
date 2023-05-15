@@ -2,10 +2,7 @@ package com.alexproject.dao;
 
 import com.alexproject.Config;
 import com.alexproject.exception.NotExistDaoException;
-import com.alexproject.model.Book;
-import com.alexproject.model.Magazine;
-import com.alexproject.model.Newspaper;
-import com.alexproject.model.Publication;
+import com.alexproject.model.*;
 import com.alexproject.sql.SqlHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -93,18 +90,8 @@ public class DaoSql implements Dao {
     }
 
     private Publication read(ResultSet rs) throws SQLException {
-        long id = rs.getLong("id");
-        String name = rs.getString("name");
-        String type = rs.getString("type");
-        Publication publication = null;
-        if ("BOOK".equals(type)) {
-            publication = new Book(id, rs.getString("name"), rs.getString("author"));
-        } else if ("NEWSPAPER".equals(type)) {
-            publication = new Newspaper(id, rs.getString("name"), rs.getInt("issue"));
-        } else if ("MAGAZINE".equals(type)) {
-            publication = new Magazine(id, rs.getString("name"), rs.getString("publishingHouse"));
-        }
-        return publication;
+        PublicationClassFactory publicationClassFactory = new PublicationClassFactory();
+        return publicationClassFactory.createPublication(rs);
     }
 
     @Override
@@ -157,7 +144,8 @@ public class DaoSql implements Dao {
             return rs.getInt(1);
         });
     }
-//hard
+
+    //hard
     public static void main(String[] args) {
         Dao sql = Config.getDao();
 
